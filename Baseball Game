@@ -1,0 +1,44 @@
+const readline = require('readline');
+const answer = getRandomAnswer();
+let attempt = 0;
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+console.log('컴퓨터가 숫자를 생성하였습니다. 답을 맞춰보세요!');
+rl.on('line', (input) => {
+  attempt++;
+  const result = checkAnswer(input, answer);
+  console.log(`${attempt}번째 시도: ${input} -> ${result}`);
+  if (result === '0B3S') {
+    console.log(`${attempt}번만에 맞히셨습니다. 게임을 종료합니다.`);
+    rl.close();
+  } else {
+    console.log('다시 시도해보세요.');
+  }
+});
+function getRandomAnswer() {
+  const nums = [];
+  while (nums.length < 3) {
+    const num = Math.floor(Math.random() * 10);
+    if (!nums.includes(num)) {
+      nums.push(num);
+    }
+  }
+  return nums.join('');
+}
+function checkAnswer(input, answer) {
+  let strike = 0;
+  let ball = 0;
+  for (let i = 0; i < input.length; i++) {
+    const num = input.charAt(i);
+    if (answer.includes(num)) {
+      if (answer.indexOf(num) === i) {
+        strike++;
+      } else {
+        ball++;
+      }
+    }
+  }
+  return `${ball}B${strike}S`;
+}
